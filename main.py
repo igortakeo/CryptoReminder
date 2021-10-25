@@ -16,51 +16,48 @@ updater = Updater(API_KEY)
 
 list =  [
     [
-        InlineKeyboardButton('Button 1', callback_data='bitcoin'),
-        InlineKeyboardButton('Button 2', callback_data='2'),
-    ]
+      InlineKeyboardButton('Bitcoin', callback_data='Bitcoin'),
+    ],
+    [
+      InlineKeyboardButton('Ethereum', callback_data='Ethereum'),
+    ],
+    [
+      InlineKeyboardButton('Cardano', callback_data='Cardano'),
+    ],
+    [
+      InlineKeyboardButton('Litecoin', callback_data='Litecoin'),
+    ],
+    [
+      InlineKeyboardButton('Yearn Finance', callback_data='yearn.finance'),
+    ],
+    [
+      InlineKeyboardButton('XRP', callback_data='XRP'),
+    ],
 ]
-''''
-listButtons1 = []
-button = InlineKeyboardButton('Bitcoint', '/bitcoin')
-listButtons1.append(button)
-list.append(listButtons1)
-button = InlineKeyboardButton('Ethereum', '/ethereum')
-listButtons2 = []
-listButtons2.append(button)  
-list.append(listButtons2)
-button = InlineKeyboardButton('Litecoin', '/litecoin')
-listButtons3 = []
-listButtons3.append(button)
-list.append(listButtons3)
-'''
 
-keyboardInline = []
-
-@bot.callback_query_handler(lambda callback_query : callback_query.data == 'bitcoin')
-def callbackBitcoin(message):
+@bot.callback_query_handler(lambda callback_query : True)
+def GetPrice(message):
   bot.delete_message(message.message.chat.id, message.message.id)
-  bitcoin(message.message)
+  GetPrice(message)
 
 def CreateMenuOfOptions(): 
   listOfCommands = [
     ('start', 'Start bot'),
     ('commands', 'Commands available to bot'),
     ('show', 'Show my cryptocurrencies'),
-    ('bitcoin', 'Get bitcoin price'),
+    ('price', 'Get price of cryptocurrencies'),
     ('delete', 'Delete one cryptocurrency'),
   ]
 
   listOfBotsCommands = []
 
   for command in listOfCommands:
-    print(command)
     listOfBotsCommands.append(BotCommand(command[0], command[1]))
 
   bot.set_my_commands(listOfBotsCommands)
 
 @bot.message_handler(commands=['start'])
-def start(message):
+def Start(message):
 
   InsertUser(
     message.from_user.id, 
@@ -70,34 +67,41 @@ def start(message):
 
   user = GetUserById(message.from_user.id)[1]
 
-  keyboardInline = InlineKeyboardMarkup(list)
-
   start_message = """
   Hi {} !!\nThis is a bot that analyze the cryptocurrency prices, he will notify you when the price that you choose it was achieved.\n
   /commands: to see commands available
   /help: everthing about the bot"""
-  bot.send_message(message.chat.id, start_message.format(user), reply_markup=keyboardInline)
+  bot.send_message(message.chat.id, start_message.format(user))
 
 @bot.message_handler(commands=['commands'])
-def commands(message):
+def Commands(message):
   commands_message = """ 
   Commands available:\n
   /choose: to choose a cryptocurrency
   /show: to show the cryptocurrencies choosed
-  /bitcoin: get bitcoin price
+  /price: get price of cryptocurrencies
   /delete: to delete a cryptocurrency choosed"""
 
   bot.send_message(message.chat.id, commands_message)
 
-@bot.message_handler(commands=['bitcoin'])
-def bitcoin(message):
-  price = GetCoinPrice('Bitcoin')
-  bot.send_message(message.chat.id, price)
+def GetPrice(message):
+  price = GetCoinPrice(message.data)
+  price_format = '{}: US$ {:.2f}'
+  bot.send_message(message.from_user.id, price_format.format(message.data, float(price)))
+
+@bot.message_handler(commands=['price'])
+def Price(message):
+  keyboardInline = InlineKeyboardMarkup(list)
+  price_message = """
+  Coins available:
+  """
+  bot.send_message(message.chat.id, price_message, reply_markup=keyboardInline)
 
 @bot.message_handler(commands=['hello'])
-def hello(message):
+def Hello(message):
   bot.reply_to(message, 'Hello Igor Takeo')
   print(message.chat.id)
 
-bot.register_callback_query_handler(callbackBitcoin, func=lambda callback_query : callback_query.data == 'bitcoin')
+
+bot.register_callback_query_handler(GetPrice, func=lambda callback_query : True)
 bot.polling()
