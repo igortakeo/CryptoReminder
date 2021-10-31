@@ -1,7 +1,7 @@
 import json
 import os
 from dotenv import load_dotenv
-from requests.sessions import Session
+from requests.sessions import Session, session
 
 from DataBase.database import GetCoinIdByName
 
@@ -35,4 +35,16 @@ def GetCoinPrice(name):
 
     data = json.loads(response.text)
 
-    return data["data"]["price"]
+    return float(data["data"]["price"])
+
+def GetDolarValue():
+
+    endpoint = os.environ.get('URL_DOLAR_VALUE')
+    session = Session()
+    response = session.get(endpoint)
+
+    data = json.loads(response.text)
+
+    value = (float(data["USDBRL"]["high"]) + float(data["USDBRL"]["low"]))/2
+
+    return value

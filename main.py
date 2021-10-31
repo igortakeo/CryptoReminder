@@ -1,39 +1,15 @@
 from datetime import MAXYEAR
-from typing import Pattern
 import telebot
 import os
 from dotenv import load_dotenv
-from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, ConversationHandler
-from DataBase.database import GetUserById, InsertUser
-from Services.CoinService import GetCoinPrice
+from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup
+from DataBase.database import GetAllCoins, GetUserById, InsertUser
+from Services.CoinService import GetCoinPrice, GetDolarValue
 
 load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
 bot = telebot.TeleBot(API_KEY)
-updater = Updater(API_KEY)
-
-list =  [
-    [
-      InlineKeyboardButton('Bitcoin', callback_data='Bitcoin'),
-    ],
-    [
-      InlineKeyboardButton('Ethereum', callback_data='Ethereum'),
-    ],
-    [
-      InlineKeyboardButton('Cardano', callback_data='Cardano'),
-    ],
-    [
-      InlineKeyboardButton('Litecoin', callback_data='Litecoin'),
-    ],
-    [
-      InlineKeyboardButton('Yearn Finance', callback_data='yearn.finance'),
-    ],
-    [
-      InlineKeyboardButton('XRP', callback_data='XRP'),
-    ],
-]
 
 @bot.callback_query_handler(lambda callback_query : True)
 def GetPrice(message):
@@ -71,6 +47,7 @@ def Start(message):
   Hi {} !!\nThis is a bot that analyze the cryptocurrency prices, he will notify you when the price that you choose it was achieved.\n
   /commands: to see commands available
   /help: everthing about the bot"""
+
   bot.send_message(message.chat.id, start_message.format(user))
 
 @bot.message_handler(commands=['commands'])
@@ -85,13 +62,30 @@ def Commands(message):
   bot.send_message(message.chat.id, commands_message)
 
 def GetPrice(message):
+
   price = GetCoinPrice(message.data)
-  price_format = '{}: US$ {:.2f}'
-  bot.send_message(message.from_user.id, price_format.format(message.data, float(price)))
+
+  dolar_value = GetDolarValue()
+
+  value_in_real = price*dolar_value
+
+  price_format = '{}: R$ {:.2f}'
+  bot.send_message(message.from_user.id, price_format.format(message.data, value_in_real))
 
 @bot.message_handler(commands=['price'])
 def Price(message):
-  keyboardInline = InlineKeyboardMarkup(list)
+
+  list_all_coins = GetAllCoins() 
+
+  list_coins = []
+
+  for coin in list_all_coins:
+    list_aux = []
+    list_aux.append(InlineKeyboardButton(coin[0], callback_data=coin[0]))
+    list_coins.append(list_aux)
+
+  keyboardInline = InlineKeyboardMarkup(list_coins)
+
   price_message = """
   Coins available:
   """
