@@ -1,18 +1,23 @@
 from datetime import MAXYEAR
 from logging import error
 from time import sleep
+import time
+import schedule
 import telebot
+import _thread as thread
 import os
 import uuid
 from dotenv import load_dotenv
 from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, Message
-from DataBase.database import GetAllCoins, GetUserById, InsertReminder, InsertUser
+from DataBase.database import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
 from Services.CoinService import GetCoinPrice, GetDolarValue
 
 load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
 bot = telebot.TeleBot(API_KEY)
+
+user_id = 'user_id'
 
 start_message = """
 Hi {} !!\nThis is a bot that analyze the cryptocurrency prices, he will notify you when the price that you choose it was achieved.\n
@@ -97,7 +102,7 @@ def ProcessReminder(message, coin):
 
   try:
     price = message.text
-    print(price)
+
     if is_valid(price):
       InsertReminder(str(uuid.uuid1()), message.from_user.id, coin, price)
       bot.reply_to(message, reminder_saved_message)
@@ -106,7 +111,7 @@ def ProcessReminder(message, coin):
     else:
       bot.reply_to(message, error_message)
 
-      bot.register_next_step_handler(message, ProcessReminder)
+      bot.register_next_step_handler(message, ProcessReminder, coin)
 
   except Exception as e:
     bot.reply_to(message,'Erro')
@@ -125,6 +130,9 @@ def SetReminderCallback(message):
 
 @bot.message_handler(commands=['start'])
 def Start(message):
+
+  global user_id
+  user_id = message.from_user.id
 
   InsertUser(
     message.from_user.id, 
@@ -147,6 +155,19 @@ def Price(message):
 
   bot.send_message(message.chat.id, price_message, reply_markup=keyboardInline)
 
+@bot.message_handler(commands=['show'])
+def Show(message):
+
+  list_reminders = GetAllRemainders(message.chat.id)
+  return_message = ''
+
+  for reminder in list_reminders:
+    aux_message = '{} - R$ {:.2f}\n'
+    return_message += aux_message.format(reminder[2], reminder[3])
+
+  bot.send_message(message.chat.id, return_message)
+  
+
 @bot.message_handler(commands=['set'])
 def Set(message):
 
@@ -159,9 +180,21 @@ def Hello(message):
   bot.reply_to(message, 'Hello Igor Takeo')
   print(message.chat.id)
 
+def check():
+  bot.send_message(user_id, 'EIIII')
+
+def MySchedule():
+  while True:
+    print('HEII')
+    schedule.run_pending()
+    time.sleep(5)
+
 
 CreateMenuOfOptions()
+schedule.every(10).seconds.do(check)
 bot.register_callback_query_handler(GetPriceCallback, func=lambda callback_query : callback_query.message.text == price_message)
 bot.register_callback_query_handler(SetReminderCallback, func=lambda callback_query : callback_query.message.text == set_message)
 
-bot.polling()
+#thread.start_new_thread(MySchedule, ())
+
+bot.infinity_polling()
