@@ -10,6 +10,7 @@ import uuid
 from dotenv import load_dotenv
 from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup
 from Commands.DeleteCommand import DeleteCommand
+from Commands.StartCommand import StartCommand
 from DataBase.database import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
 from Services.CoinService import GetCoinPrice, GetDolarValue
 
@@ -19,13 +20,6 @@ API_KEY = os.environ.get('API_KEY')
 bot = telebot.TeleBot(API_KEY)
 
 #Messages
-
-user_id = 'user_id'
-
-start_message = """
-Hi {} !!\nThis is a bot that analyze the cryptocurrency prices, he will notify you when the price that you choose it was achieved.\n
-/commands: to see commands available
-/help: everthing about the bot"""
 
 commands_message = """ 
 Commands available:\n
@@ -142,19 +136,7 @@ def SetReminderCallback(message):
 
 @bot.message_handler(commands=['start'])
 def Start(message):
-
-  global user_id
-  user_id = message.from_user.id
-
-  InsertUser(
-    message.from_user.id, 
-    message.from_user.first_name,
-    message.from_user.last_name,
-    message.from_user.username)
-
-  user = GetUserById(message.from_user.id)[1]
-
-  bot.send_message(message.chat.id, start_message.format(user))
+  StartCommand(bot, message.chat.id, message)
 
 @bot.message_handler(commands=['delete'])
 def Delete(message):
@@ -196,18 +178,18 @@ def Hello(message):
   bot.reply_to(message, 'Hello Igor Takeo')
   print(message.chat.id)
 
-def check():
-  bot.send_message(user_id, 'EIIII')
+# def check():
+#   bot.send_message(user_id, 'EIIII')
 
-def MySchedule():
-  while True:
-    print('HEII')
-    schedule.run_pending()
-    time.sleep(5)
+# def MySchedule():
+#   while True:
+#     print('HEII')
+#     schedule.run_pending()
+#     time.sleep(5)
 
 
 CreateMenuOfOptions()
-schedule.every(10).seconds.do(check)
+# schedule.every(10).seconds.do(check)
 bot.register_callback_query_handler(GetPriceCallback, func=lambda callback_query : callback_query.message.text == price_message)
 bot.register_callback_query_handler(SetReminderCallback, func=lambda callback_query : callback_query.message.text == set_message)
 
