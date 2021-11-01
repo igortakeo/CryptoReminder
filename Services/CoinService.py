@@ -2,7 +2,7 @@ import json
 import os
 from dotenv import load_dotenv
 from requests.sessions import Session, session
-from DataBase.DatabaseQuerys import GetCoinIdByName
+from DataBase.DatabaseQueries import GetCoinIdByName
 
 load_dotenv()
 

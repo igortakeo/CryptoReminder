@@ -1,4 +1,4 @@
-from DataBase.DatabaseQuerys import GetUserById, InsertUser
+from DataBase.DatabaseQueries import GetUserById, InsertUser
 from Messages import *
 
 class StartCommand:

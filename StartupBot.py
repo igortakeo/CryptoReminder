@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup
 from Commands.DeleteCommand import DeleteCommand
 from Commands.StartCommand import StartCommand
-from DataBase.DatabaseQuerys import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
+from DataBase.DatabaseQueries import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
 from Services.CoinService import GetCoinPrice, GetDolarValue
 from Messages import *
 
