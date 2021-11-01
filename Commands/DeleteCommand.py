@@ -1,5 +1,5 @@
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-from DataBase.database import DeleteReminder, GetAllRemainders
+from DataBase.DatabaseQuerys import DeleteReminder, GetAllRemainders
 from Messages import *
 
 class DeleteCommand:
