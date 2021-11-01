@@ -8,7 +8,8 @@ import _thread as thread
 import os
 import uuid
 from dotenv import load_dotenv
-from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup
+from Commands.DeleteCommand import DeleteCommand
 from DataBase.database import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
 from Services.CoinService import GetCoinPrice, GetDolarValue
 
@@ -16,6 +17,8 @@ load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
 bot = telebot.TeleBot(API_KEY)
+
+#Messages
 
 user_id = 'user_id'
 
@@ -26,14 +29,16 @@ Hi {} !!\nThis is a bot that analyze the cryptocurrency prices, he will notify y
 
 commands_message = """ 
 Commands available:\n
-/choose: to choose a cryptocurrency
-/show: to show the cryptocurrencies choosed
+/show: to show reminders
+/set: to set a reminder
 /price: get price of cryptocurrencies
-/delete: to delete a cryptocurrency choosed"""
+/delete: to delete a reminder"""
 
 set_message = """Choose one coin:"""
 
 price_message = """Coins available:"""
+
+delete_message = """Choose one reminder to delete:"""
 
 set_reminder_message = """Type the price you want to be notified !"""
 
@@ -43,14 +48,16 @@ Digite Novamente
 """
 reminder_saved_message = """Reminder saved \U00002705"""
 
+#Utilities
+
 def CreateMenuOfOptions(): 
   listOfCommands = [
     ('start', 'Start bot'), 
     ('commands', 'Commands available to bot'),
-    ('show', 'Show my notifiations'),
+    ('show', 'Show my reminders'),
     ('set', 'Set a reminder'),
     ('price', 'Get price of cryptocurrencies'),
-    ('delete', 'Delete one cryptocurrency'),
+    ('delete', 'Delete one reminder'),
   ]
 
   listOfBotsCommands = []
@@ -116,6 +123,8 @@ def ProcessReminder(message, coin):
   except Exception as e:
     bot.reply_to(message,'Erro')
 
+#Callback functions
+
 @bot.callback_query_handler(lambda callback_query : callback_query.message.text == price_message)
 def GetPriceCallback(message):
 
@@ -127,6 +136,9 @@ def SetReminderCallback(message):
 
   bot.delete_message(message.message.chat.id, message.message.id)
   SetReminder(message)
+
+
+#Commands functions
 
 @bot.message_handler(commands=['start'])
 def Start(message):
@@ -143,6 +155,10 @@ def Start(message):
   user = GetUserById(message.from_user.id)[1]
 
   bot.send_message(message.chat.id, start_message.format(user))
+
+@bot.message_handler(commands=['delete'])
+def Delete(message):
+  DeleteCommand(bot, message.chat.id)
 
 @bot.message_handler(commands=['commands'])
 def Commands(message):

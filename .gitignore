@@ -1,4 +1,5 @@
 .env
 DataBase/
 Services/__pycache__
+Commands/__pycache__
 __pycache__
