@@ -22,7 +22,6 @@ const_set_reminder_message = """Type the price you want to be notified !"""
 
 const_reminder_saved_message = """Reminder saved \U00002705"""
 
-const_error_message = """
-Invalid input !
-Type again
-"""
+const_error_message = """Invalid input!\nType again"""
+
+const_canceled_message = """Set reminder canceled \U0001F44D"""
