@@ -13,6 +13,7 @@ from Commands.DeleteCommand import DeleteCommand
 from Commands.StartCommand import StartCommand
 from DataBase.DatabaseQuerys import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
 from Services.CoinService import GetCoinPrice, GetDolarValue
+from Messages import *
 
 load_dotenv()
 
@@ -20,13 +21,6 @@ API_KEY = os.environ.get('API_KEY')
 bot = telebot.TeleBot(API_KEY)
 
 #Messages
-
-commands_message = """ 
-Commands available:\n
-/show: to show reminders
-/set: to set a reminder
-/price: get price of cryptocurrencies
-/delete: to delete a reminder"""
 
 set_message = """Choose one coin:"""
 
@@ -144,7 +138,7 @@ def Delete(message):
 
 @bot.message_handler(commands=['commands'])
 def Commands(message):
-  bot.send_message(message.chat.id, commands_message)
+  bot.send_message(message.chat.id, const_commands_message)
 
 @bot.message_handler(commands=['price'])
 def Price(message):
