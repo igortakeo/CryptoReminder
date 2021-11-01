@@ -13,3 +13,16 @@ Commands available:\n
 /set: to set a reminder
 /price: get price of cryptocurrencies
 /delete: to delete a reminder"""
+
+const_price_message = """Coins available:"""
+
+const_set_message = """Choose one coin:"""
+
+const_set_reminder_message = """Type the price you want to be notified !"""
+
+const_reminder_saved_message = """Reminder saved \U00002705"""
+
+const_error_message = """
+Invalid input !
+Type again
+"""
