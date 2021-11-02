@@ -1,21 +1,16 @@
-from datetime import MAXYEAR
-from logging import error
-from time import sleep
 import time
 import schedule
 import telebot
 import _thread as thread
 import os
-import uuid
 from dotenv import load_dotenv
-from telebot.types import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup
+from telebot.types import BotCommand
+from CheckReminders import CheckReminders
 from Commands.DeleteCommand import DeleteCommand
 from Commands.PriceCommand import PriceCommand
 from Commands.SetCommand import SetCommand
 from Commands.ShowCommand import ShowCommnand
 from Commands.StartCommand import StartCommand
-from DataBase.DatabaseQueries import GetAllCoins, GetAllRemainders, GetUserById, InsertReminder, InsertUser
-from Services.CoinService import GetCoinPrice, GetDolarValue
 from Messages import *
 
 load_dotenv()
@@ -64,19 +59,24 @@ def Show(message):
 def Set(message):
   SetCommand(bot, message.chat.id)
 
-# def check():
-#   bot.send_message(user_id, 'EIIII')
+def ScheduleReminders():
+  CheckReminders(bot)
 
-# def MySchedule():
-#   while True:
-#     print('HEII')
-#     schedule.run_pending()
-#     time.sleep(5)
+def ProcessSchedule():
 
+  while True:
+    schedule.run_pending()
+    time.sleep(5)
+
+
+def InitBot():
+  CreateMenuOfOptions()
+  bot.infinity_polling()
 
 CreateMenuOfOptions()
-# schedule.every(10).seconds.do(check)
 
-#thread.start_new_thread(MySchedule, ())
+schedule.every(10).seconds.do(ScheduleReminders)
 
-bot.infinity_polling()
+thread.start_new_thread(ProcessSchedule, ())
+
+thread.start_new_thread(InitBot(), ())

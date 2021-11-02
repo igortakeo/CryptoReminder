@@ -1,4 +1,5 @@
-from DataBase.DatabaseQueries import GetAllRemainders
+from DataBase.DatabaseQueries import GetRemindersById
+from Messages import *
 
 class ShowCommnand:
 
@@ -12,14 +13,18 @@ class ShowCommnand:
 
     def ShowReminders(self):
         
-        list_reminders = GetAllRemainders(self.user_id)
+        list_reminders = GetRemindersById(self.user_id)
         return_message = ''
+
+        if len(list_reminders) == 0:
+            self.bot.send_message(self.user_id, const_dont_have_reminders)
+            return
 
         for reminder in list_reminders:
             aux_message = '{} - {} than R$ {:.2f}\n'
             return_message += aux_message.format(
                 reminder[2],
-                'Higher' if reminder[4] == 'higher' else 'Lower' , 
+                'Higher' if reminder[4] == 'higher' else 'Lower', 
                 reminder[3]
             )
 

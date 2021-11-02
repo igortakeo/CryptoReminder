@@ -29,3 +29,9 @@ const_canceled_message = """Set reminder canceled \U0001F44D"""
 const_cancel_set_remainder_message = """Cancel set remainder"""
 
 const_choose_higher_or_lower = """Choose one this options to complete:"""
+
+const_price_is_higher = """{} price is higher than R$ {:.2f}\nCurrent price: R$ {:.2f} \U0001F4B8"""
+
+const_price_is_lower = """{} price is lower than R$ {:.2f}\nCurrent price: R$ {:.2f} \U0001F4B8"""
+
+const_dont_have_reminders = """You don't have reminders"""

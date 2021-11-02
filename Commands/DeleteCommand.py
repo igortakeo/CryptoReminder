@@ -1,5 +1,5 @@
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-from DataBase.DatabaseQueries import DeleteReminder, GetAllRemainders
+from DataBase.DatabaseQueries import DeleteReminder, GetRemindersById
 from Messages import *
 
 class DeleteCommand:
@@ -19,7 +19,7 @@ class DeleteCommand:
 
     def GetListOfReminders(self):
 
-        list_all_reminders = GetAllRemainders(self.user_id) 
+        list_all_reminders = GetRemindersById(self.user_id) 
 
         list_reminders = []
 
