@@ -25,8 +25,16 @@ class DeleteCommand:
 
         for reminder in list_all_reminders:
             list_aux = []
-            button_message = '{} - R$ {:.2f}'
-            list_aux.append(InlineKeyboardButton(button_message.format(reminder[2], reminder[3]), callback_data=reminder[0]))
+            button_message = '{} - {} than R$ {:.2f}'
+            list_aux.append(InlineKeyboardButton(
+                button_message.format(
+                    reminder[2],
+                    'Higher' if reminder[4] == 'higher' else 'Lower',
+                    reminder[3]
+                ), 
+                callback_data=reminder[0])
+            )
+
             list_reminders.append(list_aux)
 
         return list_reminders

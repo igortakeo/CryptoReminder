@@ -5,7 +5,7 @@ from Messages import *
 
 class SetCommand:
 
-    coin = ""
+    coin = ''
     price = 0.0
 
     def __init__(self, bot, user_id):

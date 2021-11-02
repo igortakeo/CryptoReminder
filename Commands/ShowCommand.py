@@ -16,7 +16,11 @@ class ShowCommnand:
         return_message = ''
 
         for reminder in list_reminders:
-            aux_message = '{} - R$ {:.2f}\n'
-            return_message += aux_message.format(reminder[2], reminder[3])
+            aux_message = '{} - {} than R$ {:.2f}\n'
+            return_message += aux_message.format(
+                reminder[2],
+                'Higher' if reminder[4] == 'higher' else 'Lower' , 
+                reminder[3]
+            )
 
         self.bot.send_message(self.user_id, return_message)
