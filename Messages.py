@@ -25,3 +25,7 @@ const_reminder_saved_message = """Reminder saved \U00002705"""
 const_error_message = """Invalid input!\nType again"""
 
 const_canceled_message = """Set reminder canceled \U0001F44D"""
+
+const_cancel_set_remainder_message = """Cancel set remainder"""
+
+const_choose_higher_or_lower = """Choose one this options to complete:"""
