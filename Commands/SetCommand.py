@@ -19,7 +19,6 @@ class SetCommand:
     def ShowCoins(self):
 
         keyboardInline = InlineKeyboardMarkup(self.GetListOfCoins())
-
         self.bot.send_message(self.user_id, const_set_message, reply_markup=keyboardInline)
 
     def GetListOfCoins(self):
@@ -66,7 +65,7 @@ class SetCommand:
         
         self.bot.clear_step_handler_by_chat_id(self.user_id)
 
-        self.bot.send_message(self.user_id, const_canceled_message)
+        self.bot.send_message(message.message.chat.id, const_canceled_message)
 
     def SetHigherOrLower(self, message):
 
@@ -77,18 +76,17 @@ class SetCommand:
             
             InsertReminder(str(uuid.uuid1()), message.from_user.id, self.coin, self.price, message.data)
 
-            self.bot.send_message(self.user_id, const_reminder_saved_message)
+            self.bot.send_message(message.message.chat.id, const_reminder_saved_message)
 
-
-    
     def SetRemainder(self, message):
 
         self.cancel_remainder = InlineKeyboardMarkup(self.CreateCancelButton())
         self.coin = message.data
         reminder_message_reply = self.bot.send_message(message.from_user.id, const_set_reminder_message, reply_markup=self.cancel_remainder)
-        self.bot.register_next_step_handler(reminder_message_reply, self.ProcessReminder)
+        print(reminder_message_reply)
+        self.bot.register_next_step_handler(reminder_message_reply, self.ProcessReminder, reminder_message_reply.chat.id, reminder_message_reply.id)
 
-    def ProcessReminder(self, message):
+    def ProcessReminder(self, message, chat_to_delete, message_to_delete):
 
         try:
             price = message.text
@@ -98,15 +96,19 @@ class SetCommand:
 
                 buttons_higher_and_lower = InlineKeyboardMarkup(self.CreateHigherAndLowerButton())
 
-                self.bot.send_message(self.user_id, const_choose_higher_or_lower, reply_markup=buttons_higher_and_lower)
+                self.bot.delete_message(chat_to_delete, message_to_delete)
+
+                self.bot.send_message(message.from_user.id, const_choose_higher_or_lower, reply_markup=buttons_higher_and_lower)
 
                 return
             else:
-                self.bot.send_message(self.user_id, const_error_message, reply_markup=self.cancel_remainder)
-                self.bot.register_next_step_handler(message, self.ProcessReminder)
+                self.bot.delete_message(chat_to_delete, message_to_delete)
+
+                error_message = self.bot.send_message(message.from_user.id, const_error_message, reply_markup=self.cancel_remainder)
+                self.bot.register_next_step_handler(message, self.ProcessReminder, error_message.chat.id, error_message.id)
 
         except Exception as e:
-            self.bot.reply_to(message, 'Error')
+            self.bot.reply_to(message, 'Error in the application')
 
 
     def CreateCancelButton(self):

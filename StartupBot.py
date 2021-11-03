@@ -65,7 +65,11 @@ def ScheduleReminders():
 def ProcessSchedule():
 
   while True:
-    schedule.run_pending()
+    try:
+      schedule.run_pending()
+    except:
+      print('Error in process schedule')
+    
     time.sleep(5)
 
 

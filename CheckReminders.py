@@ -15,7 +15,7 @@ class CheckReminders:
         print('Started Process Reminders...')
 
         list_reminders = GetAllReminders()
-        coin = 'InitialCoin'
+        coin = 'Coin'
         price = 0.0
 
         for reminder in list_reminders:
