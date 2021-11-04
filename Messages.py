@@ -35,3 +35,5 @@ const_price_is_higher = """{} price is higher than R$ {:.2f}\nCurrent price: R$ 
 const_price_is_lower = """{} price is lower than R$ {:.2f}\nCurrent price: R$ {:.2f} \U0001F4B8"""
 
 const_dont_have_reminders = """You don't have reminders"""
+
+const_reminder_already_exist = """Error, maybe already exist this reminder !!"""

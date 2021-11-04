@@ -73,17 +73,17 @@ class SetCommand:
             self.CancelSetRemainder(message)
         else:
             self.bot.delete_message(message.message.chat.id, message.message.id)
-            
-            InsertReminder(str(uuid.uuid1()), message.from_user.id, self.coin, self.price, message.data)
-
-            self.bot.send_message(message.message.chat.id, const_reminder_saved_message)
+            try:
+                InsertReminder(str(uuid.uuid1()), message.from_user.id, self.coin, self.price, message.data)
+                self.bot.send_message(message.message.chat.id, const_reminder_saved_message)
+            except:
+                self.bot.send_message(message.message.chat.id, const_reminder_already_exist)
 
     def SetRemainder(self, message):
 
         self.cancel_remainder = InlineKeyboardMarkup(self.CreateCancelButton())
         self.coin = message.data
         reminder_message_reply = self.bot.send_message(message.from_user.id, const_set_reminder_message, reply_markup=self.cancel_remainder)
-        print(reminder_message_reply)
         self.bot.register_next_step_handler(reminder_message_reply, self.ProcessReminder, reminder_message_reply.chat.id, reminder_message_reply.id)
 
     def ProcessReminder(self, message, chat_to_delete, message_to_delete):
