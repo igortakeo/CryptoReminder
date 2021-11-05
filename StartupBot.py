@@ -70,7 +70,7 @@ def ProcessSchedule():
     except:
       print('Error in process schedule')
     
-    time.sleep(5)
+    time.sleep(600)
 
 
 def InitBot():
@@ -79,7 +79,7 @@ def InitBot():
 
 CreateMenuOfOptions()
 
-schedule.every(12).hours.do(ScheduleReminders)
+schedule.every(1).hours.do(ScheduleReminders)
 
 thread.start_new_thread(ProcessSchedule, ())
 
