@@ -1,12 +1,12 @@
 from DataBase.DatabaseQueries import DeleteReminder, GetAllReminders
-from Services.CoinService import GetCoinPrice
+from Services.CoinService import GetCoinPrice, GetDolarValue
 from Messages import *
 
 class CheckReminders:
 
     def __init__(self, bot):
         self.bot = bot
-
+        self.dolar_value = GetDolarValue()
         self.ProcessReminders()
 
 
@@ -28,7 +28,7 @@ class CheckReminders:
 
             if coin_reminder_name != coin:
                 coin = coin_reminder_name
-                price = GetCoinPrice(coin)
+                price = GetCoinPrice(coin)*self.dolar_value
         
             if option_coin_reminder == 'higher':
 
