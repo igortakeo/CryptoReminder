@@ -79,7 +79,7 @@ def InitBot():
 
 CreateMenuOfOptions()
 
-schedule.every(10).seconds.do(ScheduleReminders)
+schedule.every(12).hours.do(ScheduleReminders)
 
 thread.start_new_thread(ProcessSchedule, ())
 
