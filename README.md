@@ -1,5 +1,5 @@
 # Crypto Reminder
-[Crypto Reminder](https://t.me/CryptoReminder_bot) is a Telegram bot developed in Python. <br/>
+[Crypto Reminder](https://t.me/CryptoReminder_bot) is a Telegram bot developed in Python with a PostgreSQL (not available in repository). <br/>
 The purpose of the bot is send you a message when the price of cryptocurrency in your reminder is achieved and get price of the cryptocurrencies in real time. <br/>
 
  
