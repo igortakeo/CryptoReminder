@@ -1,6 +1,0 @@
-boto==2.49.0
-psycopg2==2.9.1
-pyTelegramBotAPI==4.1.1
-python-dotenv==0.19.1
-requests==2.22.0
-schedule==1.1.0
