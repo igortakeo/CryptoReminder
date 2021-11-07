@@ -24,8 +24,9 @@ def CreateMenuOfOptions():
     ('commands', 'Commands available to bot'),
     ('show', 'Show my reminders'),
     ('set', 'Set a reminder'),
-    ('price', 'Get price of cryptocurrencies'),
+    ('price', 'Get price of one cryptocurrency'),
     ('delete', 'Delete one reminder'),
+    ('about', 'Informations about the bot'),
   ]
 
   listOfBotsCommands = []
@@ -38,6 +39,10 @@ def CreateMenuOfOptions():
 @bot.message_handler(commands=['start'])
 def Start(message):
   StartCommand(bot, message.chat.id, message)
+
+@bot.message_handler(commands=["about"])
+def About(message):
+  bot.send_message(message.chat.id, const_about_message)
 
 @bot.message_handler(commands=['delete'])
 def Delete(message):
@@ -72,12 +77,9 @@ def ProcessSchedule():
     
     time.sleep(600)
 
-
 def InitBot():
   CreateMenuOfOptions()
   bot.infinity_polling()
-
-CreateMenuOfOptions()
 
 schedule.every(1).hours.do(ScheduleReminders)
 

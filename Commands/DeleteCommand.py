@@ -10,7 +10,10 @@ class DeleteCommand:
         self.user_id = user_id
 
         self.RegisterCallbacks()
-        self.DeleteReminder()
+        try:
+            self.DeleteReminder()
+        except:
+            self.bot.send_message(self.user_id, const_dont_have_reminders)
 
     def DeleteReminder(self):
 
@@ -20,6 +23,9 @@ class DeleteCommand:
     def GetListOfReminders(self):
 
         list_all_reminders = GetRemindersById(self.user_id) 
+
+        if len(list_all_reminders) == 0:
+            raise Exception('Not exist reminders')
 
         list_reminders = []
 
