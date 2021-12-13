@@ -22,7 +22,7 @@ The bot has a routine running in parallel to verify the prices of cryptocurrenci
 - [Coin Ranking API](https://developers.coinranking.com/api/documentation)
 - [Awesome API](https://docs.awesomeapi.com.br/api-de-moedas#outras-conversoe)
 
-## Librarys
+## Libraries
 - psycopg2 2.9.1
 - pyTelegramBotAPI 4.1.1
 - python-dotenv 0.19.1
