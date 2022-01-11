@@ -43,7 +43,12 @@ class SetCommand:
 
         self.bot.register_callback_query_handler(
             self.CancelSetRemainder, 
-            func=lambda callback_query : callback_query.message.text == const_set_reminder_message or callback_query.message.text == const_error_message
+            func=lambda callback_query : callback_query.message.text == const_set_reminder_message
+        )
+
+        self.bot.register_callback_query_handler(
+            self.CancelSetRemainder, 
+            func=lambda callback_query : callback_query.message.text == const_error_message
         )
 
         self.bot.register_callback_query_handler(

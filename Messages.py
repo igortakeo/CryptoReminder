@@ -27,14 +27,11 @@ const_price_message = """Coins available:"""
 
 const_set_message = """Choose one coin:"""
 
-const_set_reminder_message = """Type the price you want to be notified !"""
+const_set_reminder_message = """Enter the price you want to be notified !"""
 
 const_reminder_saved_message = """Reminder saved \U00002705"""
 
-const_error_message = """
-Invalid input \U00002757"
-
-Type again"""
+const_error_message = """Invalid input\nType again"""
 
 const_canceled_message = """Set reminder canceled \U0001F44D"""
 
